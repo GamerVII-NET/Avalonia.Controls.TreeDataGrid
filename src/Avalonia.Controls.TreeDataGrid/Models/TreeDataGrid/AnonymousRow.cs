@@ -15,7 +15,7 @@ namespace Avalonia.Controls.Models.TreeDataGrid
     internal class AnonymousRow<TModel> : IRow<TModel>, IModelIndexableRow
     {
         private int _modelIndex;
-        [AllowNull] private TModel _model;
+        private TModel _model = default!;
 
         public object? Header => _modelIndex;
         public TModel Model => _model;
@@ -27,6 +27,8 @@ namespace Avalonia.Controls.Models.TreeDataGrid
             get => GridLength.Auto;
             set { }
         }
+
+        object? IRow.Model => Model;
 
         public AnonymousRow<TModel> Update(int modelIndex, TModel model)
         {

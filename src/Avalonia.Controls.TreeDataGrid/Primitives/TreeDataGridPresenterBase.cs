@@ -462,7 +462,7 @@ namespace Avalonia.Controls.Primitives
             // If the anchor element is at the beginning of, or before, the start of the viewport
             // then we can recycle all elements before it.
             if (u <= viewport.anchorU)
-                _realizedElements.RecycleElementsBefore(viewport.anchorIndex, _recycleElement);
+                _realizedElements!.RecycleElementsBefore(viewport.anchorIndex, _recycleElement);
 
             // Start at the anchor element and move forwards, realizing elements.
             do
@@ -486,7 +486,7 @@ namespace Avalonia.Controls.Primitives
             viewport.realizedEndU = u;
 
             // We can now recycle elements after the last element.
-            _realizedElements.RecycleElementsAfter(viewport.lastIndex, _recycleElement);
+            _realizedElements!.RecycleElementsAfter(viewport.lastIndex, _recycleElement);
 
             // Next move backwards from the anchor element, realizing elements.
             index = viewport.anchorIndex - 1;
@@ -539,7 +539,7 @@ namespace Avalonia.Controls.Primitives
 
             // Get or estimate the anchor element from which to start realization.
             var itemCount = items.Count;
-            var (anchorIndex, anchorU) = _realizedElements.GetOrEstimateAnchorElementForViewport(
+            var (anchorIndex, anchorU) = _realizedElements!.GetOrEstimateAnchorElementForViewport(
                 viewportStart,
                 viewportEnd,
                 itemCount,
@@ -640,8 +640,8 @@ namespace Avalonia.Controls.Primitives
             return new Rect(
                 0,
                 0,
-                double.IsFinite(availableSize.Width) ? availableSize.Width : 0,
-                double.IsFinite(availableSize.Height) ? availableSize.Height : 0); 
+                double.IsInfinity(availableSize.Width) ? 0 : availableSize.Width,
+                double.IsInfinity(availableSize.Height) ? 0 : availableSize.Height); 
         }
 
         private void RecycleElement(Control element, int index)

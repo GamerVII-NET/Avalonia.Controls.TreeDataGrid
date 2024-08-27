@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 
 namespace Avalonia.Controls.Models.TreeDataGrid
 {
@@ -51,7 +52,7 @@ namespace Avalonia.Controls.Models.TreeDataGrid
         /// To retrieve the index path to the model from the root data source, see
         /// <see cref="ModelIndexPath"/>.
         /// </remarks>
-        public int ModelIndex => ModelIndexPath[^1];
+        public int ModelIndex => ModelIndexPath[ModelIndexPath.Count - 1];
 
         /// <summary>
         /// Gets the index path of the model in the data source.
@@ -67,6 +68,8 @@ namespace Avalonia.Controls.Models.TreeDataGrid
             get => GridLength.Auto;
             set { }
         }
+
+        object? IRow.Model => Model;
 
         public bool IsExpanded
         {
@@ -93,7 +96,7 @@ namespace Avalonia.Controls.Models.TreeDataGrid
 
         public void UpdateModelIndex(int delta)
         {
-            ModelIndexPath = ModelIndexPath[..^1].Append(ModelIndexPath[^1] + delta);
+            ModelIndexPath = new IndexPath(ModelIndexPath.Take(ModelIndexPath.Count - 1).Concat(new[] { ModelIndexPath.Last() + delta }).ToArray());
 
             if (_childRows is null)
                 return;

@@ -94,7 +94,7 @@ namespace Avalonia.Controls.Models.TreeDataGrid
 
         public void EndEdit()
         {
-            if (_isEditing && !EqualityComparer<T>.Default.Equals(_value, _cancelValue))
+            if (_isEditing && !EqualityComparer<T>.Default.Equals(_value!, _cancelValue!))
             {
                 _isEditing = false;
                 _cancelValue = default;

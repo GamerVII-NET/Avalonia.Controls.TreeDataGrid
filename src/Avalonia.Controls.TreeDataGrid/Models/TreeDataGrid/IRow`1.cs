@@ -11,10 +11,10 @@
         /// </summary>
         new TModel Model { get; }
 
-        /// <summary>
-        /// Gets the untyped row model.
-        /// </summary>
-        object? IRow.Model => Model;
+        // /// <summary>
+        // /// Gets the untyped row model.
+        // /// </summary>
+        // object IRow.Model { get; }
 
         /// <summary>
         /// Updates the model index due to a change in the data source.

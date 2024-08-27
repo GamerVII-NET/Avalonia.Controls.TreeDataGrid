@@ -593,7 +593,7 @@ namespace Avalonia.Controls
             _autoScrollTimer.Start();
         }
 
-        [MemberNotNullWhen(true, nameof(_source))]
+        //[MemberNotNullWhen(true, nameof(_source))]
         private bool CalculateAutoDragDrop(
             TreeDataGridRow targetRow,
             DragEventArgs e,

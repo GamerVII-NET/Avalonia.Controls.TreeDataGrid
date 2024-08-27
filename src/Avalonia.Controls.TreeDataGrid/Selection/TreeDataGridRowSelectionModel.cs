@@ -48,6 +48,11 @@ namespace Avalonia.Controls.Selection
             set => Source = value;
         }
 
+        public bool IsCellSelected(int columnIndex, int rowIndex)
+        {
+            return false;
+        }
+
         bool ITreeDataGridSelectionInteraction.IsRowSelected(IRow rowModel)
         {
             if (rowModel is IModelIndexableRow indexable)
@@ -296,6 +301,11 @@ namespace Avalonia.Controls.Selection
             }
         }
 
+        public void OnKeyUp(TreeDataGrid sender, KeyEventArgs e)
+        {
+            
+        }
+
         private bool SearchAndSelectRow(TreeDataGrid treeDataGrid,
             string candidatePattern, int newIndex, TModel? model, Func<TModel, string?>? valueSelector)
         {
@@ -336,6 +346,11 @@ namespace Avalonia.Controls.Selection
             {
                 _pressedPoint = e.GetPosition(sender);
             }
+        }
+
+        public void OnPointerMoved(TreeDataGrid sender, PointerEventArgs e)
+        {
+            
         }
 
         void ITreeDataGridSelectionInteraction.OnPointerReleased(TreeDataGrid sender, PointerReleasedEventArgs e)

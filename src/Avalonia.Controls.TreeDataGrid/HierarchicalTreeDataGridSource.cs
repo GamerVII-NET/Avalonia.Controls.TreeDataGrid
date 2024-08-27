@@ -256,8 +256,8 @@ namespace Avalonia.Controls
             }
             else
             {
-                targetItems = GetItems(targetIndex[..^1]);
-                ti = targetIndex[^1];
+                targetItems = GetItems(new IndexPath(targetIndex.Take(targetIndex.Count - 1).ToArray()));
+                ti = targetIndex[targetIndex.Count - 1];
             }
 
             if (position == TreeDataGridRowDropPosition.After)
@@ -265,17 +265,17 @@ namespace Avalonia.Controls
 
             var sourceItems = new List<TModel>();
 
-            foreach (var g in indexes.GroupBy(x => x[..^1]))
+            foreach (var g in indexes.GroupBy(x => new IndexPath(x.Take(x.Count - 1).ToArray())))
             {
                 var items = GetItems(g.Key);
 
-                foreach (var i in g.Select(x => x[^1]).OrderByDescending(x => x))
+                foreach (var i in g.Select(x => x[x.Count - 1]).OrderByDescending(x => x))
                 {
                     sourceItems.Add(items[i]);
 
                     if (items == targetItems && i < ti)
                         --ti;
-                    
+
                     items.RemoveAt(i);
                 }
             }

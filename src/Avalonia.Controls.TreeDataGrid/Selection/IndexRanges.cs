@@ -36,7 +36,7 @@ namespace Avalonia.Controls.Selection
 
         public void Add(in IndexPath index)
         {
-            var parent = index[..^1];
+            var parent = new IndexPath(index.Take(index.Count - 1).ToArray());
 
             if (!_ranges.TryGetValue(parent, out var ranges))
             {
@@ -44,7 +44,7 @@ namespace Avalonia.Controls.Selection
                 _ranges.Add(parent, ranges);
             }
 
-            Count += IndexRange.Add(ranges, new IndexRange(index[^1]));
+            Count += IndexRange.Add(ranges, new IndexRange(index[index.Count - 1]));
         }
 
         public void Add(in IndexPath parent, in IndexRange range)
@@ -72,21 +72,21 @@ namespace Avalonia.Controls.Selection
 
         }
 
-        public bool Remove(in IndexPath index)
+        public bool Remove(IndexPath index)
+{
+    var parent = new IndexPath(index.Take(index.Count - 1).ToArray());
+
+    if (_ranges.TryGetValue(parent, out var ranges))
+    {
+        if (IndexRange.Remove(ranges, new IndexRange(index[index.Count - 1])) > 0)
         {
-            var parent = index[..^1];
-
-            if (_ranges.TryGetValue(parent, out var ranges))
-            {
-                if (IndexRange.Remove(ranges, new IndexRange(index[^1])) > 0)
-                {
-                    --Count;
-                    return true;
-                }
-            }
-
-            return false;
+            --Count;
+            return true;
         }
+    }
+
+    return false;
+}
 
         public bool Remove(in IndexPath parent, IndexRange range)
         {
@@ -112,13 +112,13 @@ namespace Avalonia.Controls.Selection
             return false;
         }
 
-        public bool Contains(in IndexPath index)
+        public bool Contains(IndexPath index)
         {
-            var parent = index[..^1];
+            var parent = new IndexPath(index.Take(index.Count - 1).ToArray());
 
             if (_ranges.TryGetValue(parent, out var ranges))
             {
-                return IndexRange.Contains(ranges, index[^1]);
+                return IndexRange.Contains(ranges, index[index.Count - 1]);
             }
 
             return false;

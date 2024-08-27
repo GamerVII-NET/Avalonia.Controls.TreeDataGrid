@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Avalonia.Controls.Utils
 {
@@ -19,8 +18,7 @@ namespace Avalonia.Controls.Utils
                 map.Add(i);
             }
 
-            var span = CollectionsMarshal.AsSpan(map);
-            SortHelper<int>.Sort(span, compare);
+            map.Sort(compare);
             return map;
         }
     }

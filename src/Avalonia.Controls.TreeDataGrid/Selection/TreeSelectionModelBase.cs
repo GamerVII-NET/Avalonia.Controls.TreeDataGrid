@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 #nullable enable
 
@@ -192,10 +193,10 @@ namespace Avalonia.Controls.Selection
 
         public bool IsSelected(IndexPath index)
         {
-            if (index == default)
+            if (index == default(IndexPath))
                 return false;
-            var node = GetNode(index[..^1]);
-            return IndexRange.Contains(node?.Ranges, index[^1]);
+            var node = GetNode(new IndexPath(index.Take(index.Count - 1).ToArray()));
+            return IndexRange.Contains(node?.Ranges, index[index.Count - 1]);
         }
 
         public void Select(IndexPath index) => Select(index, updateRangeAnchorIndex: false);
@@ -255,10 +256,10 @@ namespace Avalonia.Controls.Selection
 
             if (path != default)
             {
-                var node = GetNode(path[..^1]);
+                var node = GetNode(new IndexPath(path.Take(path.Count - 1).ToArray()));
 
                 if (node is not null)
-                    return node.ItemsView![path[^1]];
+                    return node.ItemsView![path[path.Count - 1]];
             }
 
             throw new ArgumentOutOfRangeException(nameof(path));
@@ -511,8 +512,11 @@ namespace Avalonia.Controls.Selection
         {
             var result = 0;
 
-            foreach (var (parent, ranges) in selectedRanges.Ranges)
+            foreach (var pair in selectedRanges.Ranges)
             {
+                var parent = pair.Key;
+                var ranges = pair.Value;
+
                 var node = GetOrCreateNode(parent);
 
                 if (node is not null)
@@ -529,8 +533,11 @@ namespace Avalonia.Controls.Selection
         {
             var result = 0;
 
-            foreach (var (parent, ranges) in selectedRanges.Ranges)
+            foreach (var pair in selectedRanges.Ranges)
             {
+                var parent = pair.Key;
+                var ranges = pair.Value;
+
                 var node = GetOrCreateNode(parent);
 
                 if (node is not null)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using Avalonia.Threading;
 using ReactiveUI;
 
@@ -81,40 +82,46 @@ namespace TreeDataGridDemo.Models
 
         private ObservableCollection<FileTreeNodeModel> LoadChildren()
         {
-            if (!IsDirectory)
+            try
             {
-                throw new NotSupportedException();
+                if (!IsDirectory)
+                {
+                    throw new NotSupportedException();
+                }
+
+                var result = new ObservableCollection<FileTreeNodeModel>();
+
+                foreach (var d in Directory.GetDirectories(Path))
+                {
+                    result.Add(new FileTreeNodeModel(d, true));
+                }
+
+                foreach (var f in Directory.GetFiles(Path))
+                {
+                    result.Add(new FileTreeNodeModel(f, false));
+                }
+
+                _watcher = new FileSystemWatcher
+                {
+                    Path = Path,
+                    NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size | NotifyFilters.LastWrite,
+                };
+
+                _watcher.Changed += OnChanged;
+                _watcher.Created += OnCreated;
+                _watcher.Deleted += OnDeleted;
+                _watcher.Renamed += OnRenamed;
+                _watcher.EnableRaisingEvents = true;
+
+                if (result.Count == 0)
+                    HasChildren = false;
+
+                return result;
             }
-
-            var options = new EnumerationOptions { IgnoreInaccessible = true };
-            var result = new ObservableCollection<FileTreeNodeModel>();
-
-            foreach (var d in Directory.EnumerateDirectories(Path, "*", options))
+            catch
             {
-                result.Add(new FileTreeNodeModel(d, true));
+                return new ObservableCollection<FileTreeNodeModel>();
             }
-
-            foreach (var f in Directory.EnumerateFiles(Path, "*", options))
-            {
-                result.Add(new FileTreeNodeModel(f, false));
-            }
-
-            _watcher = new FileSystemWatcher
-            {
-                Path = Path,
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.Size | NotifyFilters.LastWrite,
-            };
-
-            _watcher.Changed += OnChanged;
-            _watcher.Created += OnCreated;
-            _watcher.Deleted += OnDeleted;
-            _watcher.Renamed += OnRenamed;
-            _watcher.EnableRaisingEvents = true;
-
-            if (result.Count == 0)
-                HasChildren = false;
-
-            return result;
         }
 
         public static Comparison<FileTreeNodeModel?> SortAscending<T>(Func<FileTreeNodeModel, T> selector)

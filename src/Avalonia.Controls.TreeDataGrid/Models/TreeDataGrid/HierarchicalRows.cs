@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Avalonia.Controls.Utils;
 using Avalonia.Utilities;
 
@@ -176,7 +177,7 @@ namespace Avalonia.Controls.Models.TreeDataGrid
 
         public int GetParentRowIndex(IndexPath modelIndex)
         {
-            return ModelIndexToRowIndex(modelIndex[..^1]);
+            return ModelIndexToRowIndex(new IndexPath(modelIndex.Take(modelIndex.Count - 1).ToArray()));
         }
 
         public int ModelIndexToRowIndex(IndexPath modelIndex)

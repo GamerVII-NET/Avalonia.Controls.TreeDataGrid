@@ -71,7 +71,7 @@ namespace Avalonia.Controls.Selection
             return Begin == other.Begin && End == other.End;
         }
 
-        public override int GetHashCode() => HashCode.Combine(Begin, End);
+        public override int GetHashCode() => Begin.GetHashCode() ^ End.GetHashCode();
 
         public override string ToString() => $"[{Begin}..{End}]";
 

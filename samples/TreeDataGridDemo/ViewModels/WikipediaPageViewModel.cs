@@ -51,7 +51,7 @@ namespace TreeDataGridDemo.ViewModels
                 {
                     PropertyNameCaseInsensitive = true,
                 });
-
+            
                 if (data?.Selected is not null)
                     _data.AddRange(data.Selected.SelectMany(x => x.Pages!));
             }

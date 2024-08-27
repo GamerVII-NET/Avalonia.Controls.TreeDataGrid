@@ -100,6 +100,18 @@ namespace Avalonia.Controls.Selection
             return IsSelected(columnIndex, rowIndex);
         }
 
+        bool ITreeDataGridSelectionInteraction.IsRowSelected(IRow rowModel)
+        {
+            // Implement your logic to determine if a row model is selected
+            return false; // Change this to your actual implementation
+        }
+
+        bool ITreeDataGridSelectionInteraction.IsRowSelected(int rowIndex)
+        {
+            // Implement your logic to determine if a row index is selected
+            return false; // Change this to your actual implementation
+        }
+
         void ITreeDataGridSelectionInteraction.OnKeyDown(TreeDataGrid sender, KeyEventArgs e)
         {
             var direction = e.Key.ToNavigationDirection();
@@ -121,8 +133,8 @@ namespace Avalonia.Controls.Selection
             };
 
             var anchor = shift ? _rangeAnchor : GetAnchor();
-            var columnIndex = Math.Clamp(anchor.x + x, 0, sender.Columns.Count - 1);
-            var rowIndex = Math.Clamp(anchor.y + y, 0, sender.Rows.Count - 1);
+            var columnIndex = Math.Max(0, Math.Min(anchor.x + x, sender.Columns.Count - 1));
+            var rowIndex = Math.Max(0, Math.Min(anchor.y + y, sender.Rows.Count - 1));
 
             if (!shift)
                 Select(columnIndex, rowIndex);
@@ -134,6 +146,22 @@ namespace Avalonia.Controls.Selection
                 rowIndex,
                 sender.ColumnHeadersPresenter?.TryGetElement(columnIndex)?.Bounds);
         }
+
+        public void OnPreviewKeyDown(TreeDataGrid sender, KeyEventArgs e)
+        {
+            
+        }
+
+        public void OnKeyUp(TreeDataGrid sender, KeyEventArgs e)
+        {
+            
+        }
+
+        public void OnTextInput(TreeDataGrid sender, TextInputEventArgs e)
+        {
+            
+        }
+
 
         void ITreeDataGridSelectionInteraction.OnPointerPressed(TreeDataGrid sender, PointerPressedEventArgs e)
         {
@@ -156,6 +184,11 @@ namespace Avalonia.Controls.Selection
             {
                 _pressedPoint = e.GetPosition(sender);
             }
+        }
+
+        void ITreeDataGridSelectionInteraction.OnPointerMoved(TreeDataGrid sender, PointerEventArgs e)
+        {
+            // Implement your PointerMoved logic here
         }
 
         void ITreeDataGridSelectionInteraction.OnPointerReleased(TreeDataGrid sender, PointerReleasedEventArgs e)
@@ -225,11 +258,11 @@ namespace Avalonia.Controls.Selection
             Select(columnIndex, rowIndex, modelIndex);
         }
 
-        private void Select(int columnIndex, int rowIndex, IndexPath modelndex)
+        private void Select(int columnIndex, int rowIndex, IndexPath modelIndex)
         {
             BeginBatchUpdate();
             _selectedColumns.SelectedIndex = columnIndex;
-            _selectedRows.SelectedIndex = modelndex;
+            _selectedRows.SelectedIndex = modelIndex;
             _rangeAnchor = (columnIndex, rowIndex);
             EndBatchUpdate();
         }

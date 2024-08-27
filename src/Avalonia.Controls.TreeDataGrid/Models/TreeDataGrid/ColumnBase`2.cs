@@ -113,19 +113,19 @@ namespace Avalonia.Controls.Models.TreeDataGrid
         private int DefaultSortAscending(TModel? x, TModel? y)
         {
             if (x is null || y is null)
-                return Comparer<TModel>.Default.Compare(x, y);
+                return Comparer<TModel?>.Default.Compare(x, y);
             var a = ValueSelector(x);
             var b = ValueSelector(y);
-            return Comparer<TValue>.Default.Compare(a, b);
+            return Comparer<TValue>.Default.Compare(a!, b!);
         }
 
         private int DefaultSortDescending(TModel? x, TModel? y)
         {
             if (x is null || y is null)
-                return -Comparer<TModel>.Default.Compare(x, y);
+                return Comparer<TModel?>.Default.Compare(x, y);
             var a = ValueSelector(x);
             var b = ValueSelector(y);
-            return Comparer<TValue>.Default.Compare(b, a);
+            return Comparer<TValue>.Default.Compare(b!, a!);
         }
     }
 }

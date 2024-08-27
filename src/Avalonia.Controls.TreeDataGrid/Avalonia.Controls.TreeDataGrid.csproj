@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <IsPackable>True</IsPackable>
-    <LangVersion>10</LangVersion>
+    <LangVersion>default</LangVersion>
     <RootNamespace>Avalonia.Controls</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>

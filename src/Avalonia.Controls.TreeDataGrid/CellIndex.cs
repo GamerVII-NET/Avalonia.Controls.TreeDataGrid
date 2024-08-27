@@ -9,5 +9,15 @@
     /// <param name="RowIndex">
     /// The hierarchical index of the row model in the data source.
     /// </param>
-    public readonly record struct CellIndex(int ColumnIndex, IndexPath RowIndex);
+    public readonly struct CellIndex
+    {
+        public CellIndex(int columnIndex, IndexPath rowIndex)
+        {
+            ColumnIndex = columnIndex;
+            RowIndex = rowIndex;
+        }
+        
+        public int ColumnIndex { get; }
+        public IndexPath RowIndex { get; }
+    }
 }

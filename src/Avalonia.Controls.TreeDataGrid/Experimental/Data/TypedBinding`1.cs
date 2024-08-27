@@ -41,18 +41,18 @@ namespace Avalonia.Experimental.Data
         public static TypedBinding<TIn, TOut> TwoWay<TOut>(Expression<Func<TIn, TOut>> expression)
         {
             var property = (expression.Body as MemberExpression)?.Member as PropertyInfo ??
-                throw new ArgumentException(
-                    $"Cannot create a two-way binding for '{expression}' because the expression does not target a property.",
-                    nameof(expression));
+                           throw new ArgumentException(
+                               $"Cannot create a two-way binding for '{expression}' because the expression does not target a property.",
+                               nameof(expression));
 
-            MethodInfo? getMethodInfo = property.GetGetMethod(true);
-            if (getMethodInfo is null || getMethodInfo.IsPrivate)
+            MethodInfo getMethodInfo = property.GetGetMethod(true);
+            if (getMethodInfo == null || getMethodInfo.IsPrivate)
                 throw new ArgumentException(
                     $"Cannot create a two-way binding for '{expression}' because the property has no getter or the getter is private.",
                     nameof(expression));
 
-            MethodInfo? setMethodInfo = property.GetSetMethod(true);
-            if (setMethodInfo is null || setMethodInfo.IsPrivate)
+            MethodInfo setMethodInfo = property.GetSetMethod(true);
+            if (setMethodInfo == null || setMethodInfo.IsPrivate)
                 throw new ArgumentException(
                     $"Cannot create a two-way binding for '{expression}' because the property has no setter or the setter is private.",
                     nameof(expression));
@@ -64,16 +64,13 @@ namespace Avalonia.Experimental.Data
                 (o, v) => property.SetValue(o, v) :
                 (root, v) =>
                 {
-                    var o = links[^2](root);
+                    var o = links[links.Length - 2](root);
                     property.SetValue(o, v);
                 };
 
             return new TypedBinding<TIn, TOut>
             {
-                Read = expression.Compile(),
-                Write = write,
-                Links = links,
-                Mode = BindingMode.TwoWay,
+                Read = expression.Compile(), Write = write, Links = links, Mode = BindingMode.TwoWay,
             };
         }
 

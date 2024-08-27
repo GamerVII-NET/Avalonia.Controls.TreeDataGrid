@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Avalonia.Controls.Utils;
+using CollectionChangedEventManager = Avalonia.Controls.Utils.CollectionChangedEventManager;
 
 #nullable enable
 
