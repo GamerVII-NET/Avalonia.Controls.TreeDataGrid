@@ -465,7 +465,7 @@ namespace Avalonia.Controls.Selection
             {
                 if (!treeDataGrid.QueryCancelSelection())
                 {
-                    if (IsSelected(modelIndex) == true)
+                    if (IsSelected(modelIndex))
                         Deselect(modelIndex);
                     else
                         Select(modelIndex);
