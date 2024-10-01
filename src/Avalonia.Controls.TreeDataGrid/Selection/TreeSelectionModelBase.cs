@@ -193,10 +193,15 @@ namespace Avalonia.Controls.Selection
 
         public bool IsSelected(IndexPath index)
         {
-            if (index == default(IndexPath))
-                return false;
-            var node = GetNode(new IndexPath(index.Take(index.Count - 1).ToArray()));
-            return IndexRange.Contains(node?.Ranges, index[index.Count - 1]);
+            // if (index == default(IndexPath))
+            //     return false;
+            // var node = GetNode(new IndexPath(index.Take(index.Count - 1).ToArray()));
+            // return IndexRange.Contains(node?.Ranges, index[index.Count - 1]);
+            
+            var parentIndex = new IndexPath(index.Take(index.Count - 1).ToArray());
+    
+            var node = GetNode(parentIndex);
+            return node != null && IndexRange.Contains(node.Ranges, index[index.Count - 1]);
         }
 
         public void Select(IndexPath index) => Select(index, updateRangeAnchorIndex: false);
@@ -427,7 +432,7 @@ namespace Avalonia.Controls.Selection
 
             o.DeselectedRanges?.Remove(index);
 
-            if (!IsSelected(index))
+            //if (!IsSelected(index))
             {
                 o.SelectedRanges ??= new();
                 o.SelectedRanges.Add(index);
